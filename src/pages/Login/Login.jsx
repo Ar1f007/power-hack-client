@@ -1,0 +1,79 @@
+import { useForm } from 'react-hook-form';
+import {
+  inputClasses,
+  btnClasses,
+  containerClasses,
+  headingClasses,
+  formSectionClasses,
+  labelClasses,
+  formGridClasses,
+  btnContainerClasses,
+} from './login.styles';
+import { Link } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import schema from '../../validation/loginSchema';
+
+export const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <section className={containerClasses}>
+      <section className={formSectionClasses}>
+        <h2 className={headingClasses}>Login to your account</h2>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={formGridClasses}>
+            <div>
+              <label className={labelClasses} htmlFor="email">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                className={inputClasses}
+                {...register('email', { required: true })}
+              />
+              {errors?.email && <p className="text-sm text-error mt-1">{errors.email?.message}</p>}
+            </div>
+
+            <div>
+              <label className={labelClasses} htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                className={inputClasses}
+                {...register('password', { required: true })}
+              />
+              {errors?.password && (
+                <p className="text-sm text-error mt-1">{errors.password?.message}</p>
+              )}
+            </div>
+          </div>
+          <div className={btnContainerClasses}>
+            <p>
+              Don't have account?{' '}
+              <Link to="/register" className="link">
+                Create here
+              </Link>{' '}
+            </p>
+            <button type="submit" className={btnClasses}>
+              Login
+            </button>
+          </div>
+        </form>
+      </section>
+    </section>
+  );
+};
