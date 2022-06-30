@@ -7,6 +7,16 @@ const instance = axios.create({
   baseURL: url,
 });
 
+instance.interceptors.request.use(
+  (config) => {
+    config.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -29,7 +39,11 @@ instance.interceptors.response.use(
         break;
 
       case 404:
-        alert('error', message || 'Not found');
+        alert('error', message || 'Resource not found');
+        break;
+
+      case 424:
+        alert('error', message || 'Could not perform the task');
         break;
 
       default:

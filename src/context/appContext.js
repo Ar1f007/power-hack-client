@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer } from 'react';
 import reducer from './reducer';
 import axios from '../config/axios';
 import { useNavigate } from 'react-router-dom';
+import alert from '../utils/alert';
 
 const user = localStorage.getItem('user');
 const token = localStorage.getItem('token');
@@ -10,7 +11,16 @@ const INITIAL_VALUE = {
   user: user ? JSON.parse(user) : null,
   token: token,
   isLoading: false,
+  savingBill: false,
+  bill: {},
+  bills: [],
+  formBillData: {},
+  totalAmount: 0,
+  formData: {},
+  isEditing: false,
+  updated: false,
 };
+
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
@@ -67,8 +77,32 @@ export const AppContextProvider = ({ children }) => {
     navigate('/');
   };
 
+  const saveBill = async (data) => {
+    dispatch({ type: 'ADD_BILL_BEGIN', payload: data });
+
+    try {
+      const res = await axios.post('/add-billing', data);
+
+      dispatch({ type: 'ADD_BILL_SUCCESS', payload: res.data });
+    } catch (error) {
+      dispatch({ type: 'ADD_BILL_FAILED', payload: data.amount });
+    }
+  };
+
+  const updateBill = async (data) => {
+    const res = await axios.patch(`/update-billing/${data.id}`, data);
+    if (res.status === 200) {
+      alert('success', 'Updated successfully');
+      dispatch({ type: 'TOGGLE_UPDATE_STATE' });
+    }
+
+    // dispatch({ type: 'CLEAR_UPDATE_STATE' });
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, dispatch, registerUser, loginUser, logout }}>
+    <AppContext.Provider
+      value={{ ...state, dispatch, registerUser, loginUser, logout, saveBill, updateBill }}
+    >
       {children}
     </AppContext.Provider>
   );

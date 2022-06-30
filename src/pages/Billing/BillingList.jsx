@@ -1,3 +1,11 @@
+import { Header } from './Header';
+import { Table } from './Table';
+
 export const BillingList = () => {
-  return <div>BillingList</div>;
+  return (
+    <>
+      <Header />
+      <Table />
+    </>
+  );
 };
