@@ -14,8 +14,11 @@ import {
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from '../../validation/registerSchema';
+import useAppContext from '../../context/appContext';
 
 export const Register = () => {
+  const { registerUser, isLoading } = useAppContext();
+
   const {
     register,
     handleSubmit,
@@ -25,7 +28,7 @@ export const Register = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    registerUser(data);
   };
 
   return (
@@ -86,7 +89,7 @@ export const Register = () => {
               </Link>{' '}
             </p>
             <button type="submit" className={btnClasses}>
-              Create
+              {isLoading ? 'Creating...' : 'Create'}
             </button>
           </div>
         </form>

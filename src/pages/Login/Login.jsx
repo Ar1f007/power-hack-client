@@ -12,8 +12,10 @@ import {
 import { Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from '../../validation/loginSchema';
+import useAppContext from '../../context/appContext';
 
 export const Login = () => {
+  const { loginUser, isLoading } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -23,7 +25,7 @@ export const Login = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    loginUser(data);
   };
 
   return (
@@ -69,7 +71,7 @@ export const Login = () => {
               </Link>{' '}
             </p>
             <button type="submit" className={btnClasses}>
-              Login
+              {isLoading ? 'Login...' : 'Login'}
             </button>
           </div>
         </form>
