@@ -1,26 +1,31 @@
 import { createContext, useContext, useReducer } from 'react';
 import reducer from './reducer';
 import axios from '../config/axios';
+import { useNavigate } from 'react-router-dom';
+
+const user = localStorage.getItem('user');
+const token = localStorage.getItem('token');
 
 const INITIAL_VALUE = {
-  user: null,
-  token: null,
+  user: user ? JSON.parse(user) : null,
+  token: token,
   isLoading: false,
 };
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_VALUE);
+  const navigate = useNavigate();
 
   const addUserToLocalStorage = (user, token) => {
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('token', token);
   };
 
-  // const removeUserFromLocalStorage = () => {
-  //   localStorage.removeItem('user');
-  //   localStorage.removeItem('token');
-  // };
+  const removeUserFromLocalStorage = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+  };
 
   const registerUser = async (userInfo) => {
     dispatch({ type: 'REGISTER_USER_BEGIN' });
@@ -55,8 +60,15 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  const logout = async () => {
+    dispatch({ type: 'LOGOUT_USER' });
+
+    removeUserFromLocalStorage();
+    navigate('/');
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, dispatch, registerUser, loginUser }}>
+    <AppContext.Provider value={{ ...state, dispatch, registerUser, loginUser, logout }}>
       {children}
     </AppContext.Provider>
   );

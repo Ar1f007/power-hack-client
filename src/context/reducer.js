@@ -37,6 +37,10 @@ const reducer = (state, action) => {
   if (action.type === 'LOGIN_USER_ERROR') {
     return { ...state, isLoading: false, user: null, token: null };
   }
+
+  if (action.type === 'LOGOUT_USER') {
+    return { ...state, user: null, token: null };
+  }
   return state;
 };
 

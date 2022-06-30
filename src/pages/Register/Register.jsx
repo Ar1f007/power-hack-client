@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   inputClasses,
@@ -15,9 +15,10 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from '../../validation/registerSchema';
 import useAppContext from '../../context/appContext';
+import { useEffect } from 'react';
 
 export const Register = () => {
-  const { registerUser, isLoading } = useAppContext();
+  const { user, registerUser, isLoading } = useAppContext();
 
   const {
     register,
@@ -27,9 +28,17 @@ export const Register = () => {
     resolver: yupResolver(schema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = (data) => {
     registerUser(data);
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/billing');
+    }
+  }, [user, navigate]);
 
   return (
     <section className={containerClasses}>

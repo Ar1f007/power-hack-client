@@ -9,13 +9,14 @@ import {
   formGridClasses,
   btnContainerClasses,
 } from './login.styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from '../../validation/loginSchema';
 import useAppContext from '../../context/appContext';
+import { useEffect } from 'react';
 
 export const Login = () => {
-  const { loginUser, isLoading } = useAppContext();
+  const { user, loginUser, isLoading } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -24,9 +25,17 @@ export const Login = () => {
     resolver: yupResolver(schema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = (data) => {
     loginUser(data);
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/billing');
+    }
+  }, [user, navigate]);
 
   return (
     <section className={containerClasses}>
