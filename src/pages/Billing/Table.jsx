@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import axios from '../../config/axios';
 import { useEffect, useState } from 'react';
 import alert from '../../utils/alert';
+import { PaginationBtn } from '../../components/PaginationBtn';
 
 const fetchBills = async () => {
   const { data } = await axios.get('/billing-list');
@@ -17,7 +18,7 @@ export const Table = () => {
     bill: {},
   });
 
-  const { savingBill, bill, bills, formBillData, dispatch, updated } = useAppContext();
+  const { savingBill, bill, bills, formBillData, dispatch, updated, numOfPages } = useAppContext();
   const { data, refetch, isLoading } = useQuery(['bills', updated], fetchBills);
 
   const handleDelete = async (billId) => {
@@ -42,7 +43,7 @@ export const Table = () => {
   };
 
   useEffect(() => {
-    if (data) {
+    if (data?.bills) {
       dispatch({ type: 'SET_BILLS', payload: data });
     }
   }, [data, dispatch]);
@@ -108,6 +109,8 @@ export const Table = () => {
           </tbody>
         </table>
       </div>
+
+      {numOfPages > 1 && <PaginationBtn />}
     </section>
   );
 };

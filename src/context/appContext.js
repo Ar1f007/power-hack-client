@@ -19,6 +19,8 @@ const INITIAL_VALUE = {
   formData: {},
   isEditing: false,
   updated: false,
+  numOfPages: 1,
+  page: 1,
 };
 
 const AppContext = createContext();
@@ -95,13 +97,32 @@ export const AppContextProvider = ({ children }) => {
       alert('success', 'Updated successfully');
       dispatch({ type: 'TOGGLE_UPDATE_STATE' });
     }
+  };
 
-    // dispatch({ type: 'CLEAR_UPDATE_STATE' });
+  const getBills = async (query = '') => {
+    let url = `/billing-list?page=${state.page}`;
+
+    if (query) {
+      url = url + `&search=${query}`;
+    }
+
+    const { data } = await axios(url);
+
+    dispatch({ type: 'GET_BILLS', payload: data });
   };
 
   return (
     <AppContext.Provider
-      value={{ ...state, dispatch, registerUser, loginUser, logout, saveBill, updateBill }}
+      value={{
+        ...state,
+        dispatch,
+        registerUser,
+        loginUser,
+        logout,
+        saveBill,
+        updateBill,
+        getBills,
+      }}
     >
       {children}
     </AppContext.Provider>

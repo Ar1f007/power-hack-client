@@ -55,6 +55,7 @@ const reducer = (state, action) => {
       ...state,
       savingBill: false,
       bill: action.payload,
+      bills: [action.payload, ...state.bills],
     };
   }
   if (action.type === 'ADD_BILL_FAILED') {
@@ -62,13 +63,6 @@ const reducer = (state, action) => {
       ...state,
       savingBill: false,
       totalAmount: state.totalAmount - action.payload.amount,
-    };
-  }
-
-  if (action.type === 'GET_BILLS') {
-    return {
-      ...state,
-      bills: [...action.payload],
     };
   }
 
@@ -82,11 +76,12 @@ const reducer = (state, action) => {
   if (action.type === 'SET_BILLS') {
     return {
       ...state,
-      bills: action.payload,
-      totalAmount: action.payload.reduce((acc, curr) => {
+      bills: action.payload.bills,
+      totalAmount: action.payload.bills.reduce((acc, curr) => {
         acc = acc + curr.amount;
         return acc;
       }, 0),
+      numOfPages: action.payload.numOfPages,
     };
   }
 
@@ -107,12 +102,19 @@ const reducer = (state, action) => {
     };
   }
 
-  // if (action.type === 'CLEAR_UPDATE_STATE') {
-  //   return {
-  //     ...state,
-  //     updated: false,
-  //   };
-  // }
+  if (action.type === 'CHANGE_PAGE') {
+    return {
+      ...state,
+      page: action.payload,
+    };
+  }
+  if (action.type === 'GET_BILLS') {
+    return {
+      ...state,
+      bills: action.payload.bills,
+      numOfPages: action.payload.numOfPages,
+    };
+  }
   return state;
 };
 
