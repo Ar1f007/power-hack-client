@@ -27,7 +27,7 @@ export const Header = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
               type="text"
-              placeholder="type name/email etc. then press enter"
+              placeholder="search by name/email/phone number"
               className="input input-sm input-bordered w-full max-w-md"
               {...register('searchTerm')}
             />

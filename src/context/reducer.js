@@ -77,11 +77,12 @@ const reducer = (state, action) => {
     return {
       ...state,
       bills: action.payload.bills,
-      totalAmount: action.payload.bills.reduce((acc, curr) => {
-        acc = acc + curr.amount;
-        return acc;
-      }, 0),
+      // totalAmount: action.payload.bills.reduce((acc, curr) => {
+      //   acc = acc + curr.amount;
+      //   return acc;
+      // }, 0),
       numOfPages: action.payload.numOfPages,
+      totalAmount: action.payload.totalPaidAmount,
     };
   }
 
@@ -113,6 +114,11 @@ const reducer = (state, action) => {
       ...state,
       bills: action.payload.bills,
       numOfPages: action.payload.numOfPages,
+      // totalAmount: action.payload.bills.reduce((acc, curr) => {
+      //   acc = acc + curr.amount;
+      //   return acc;
+      // }, 0),
+      totalAmount: action.payload.totalPaidAmount,
     };
   }
   return state;

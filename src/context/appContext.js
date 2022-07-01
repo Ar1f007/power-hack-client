@@ -43,7 +43,7 @@ export const AppContextProvider = ({ children }) => {
     dispatch({ type: 'REGISTER_USER_BEGIN' });
 
     try {
-      const res = await axios.post('/register', userInfo);
+      const res = await axios.post('/registration', userInfo);
       console.log(res);
 
       const { user, token } = res.data;
@@ -60,8 +60,6 @@ export const AppContextProvider = ({ children }) => {
 
     try {
       const res = await axios.post('/login', userInfo);
-
-      console.log(res);
 
       const { user, token } = res.data;
 

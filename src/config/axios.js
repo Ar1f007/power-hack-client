@@ -1,10 +1,12 @@
 import axios from 'axios';
 import alert from '../utils/alert';
 
-const url = 'http://localhost:5000/api';
+// const url = 'http://localhost:5000/api';
+const serverURL = 'https://true-hockey-27943.herokuapp.com/api';
 
 const instance = axios.create({
-  baseURL: url,
+  baseURL: serverURL,
+  // baseURL: url,
 });
 
 instance.interceptors.request.use(
@@ -26,16 +28,29 @@ instance.interceptors.response.use(
       data: { message },
     } = error.response;
 
+    console.log(error.response);
     switch (status) {
       case 400:
         alert('warning', message || 'Not found');
         break;
 
-      case 401 || 403:
+      case 401:
+        alert('error', `${message}, redirecting to login page` || 'Login to continue');
         localStorage.removeItem('user');
         localStorage.removeItem('token');
-        window.location.href = '/';
-        alert('error', message || 'Login to continue');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 3000);
+
+        break;
+
+      case 403:
+        alert('error', `${message}, redirecting to login page` || 'Login to continue');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 3000);
         break;
 
       case 404:

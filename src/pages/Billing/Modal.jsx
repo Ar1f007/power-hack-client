@@ -123,7 +123,7 @@ export const Modal = () => {
             {/* Paid amount */}
 
             <button className="btn" type="submit">
-              Submit
+              {isEditing ? 'Update' : 'Submit'}
             </button>
           </form>
         </div>
